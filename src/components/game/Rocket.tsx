@@ -16,7 +16,7 @@ export function Rocket({ palette: p, boost = false }: { palette: Palette; boost?
  return <group>
   <mesh geometry={geometry.body}><meshPhysicalMaterial color={p.ivory} metalness={.28} roughness={.3} clearcoat={.8}/></mesh>
   <mesh geometry={geometry.nose}><meshPhysicalMaterial color={p.red} metalness={.25} roughness={.22} clearcoat={1}/></mesh>
-  {[0,Math.PI,Math.PI/2].map((a,i)=><mesh key={i} geometry={geometry.fin} rotation-y={a}><meshPhysicalMaterial color={p.red} metalness={.3} roughness={.25} clearcoat={1}/></mesh>)}
+  {[0,Math.PI,-Math.PI/2].map((a,i)=><mesh key={i} geometry={geometry.fin} rotation-y={a}><meshPhysicalMaterial color={p.red} metalness={.3} roughness={.25} clearcoat={1}/></mesh>)}
   <group position={[0,.55,1.045]} rotation-x={-.11}>
    <mesh><torusGeometry args={[.59,.13,16,64]}/><meshStandardMaterial color={p.metal} metalness={.85} roughness={.25}/></mesh>
    <mesh position-z={.09} scale={[.51,.51,.2]}><sphereGeometry args={[1,48,32]}/><meshPhysicalMaterial color={p.glass} emissive={p.glass} emissiveIntensity={.22} metalness={.4} roughness={.08} clearcoat={1}/></mesh>

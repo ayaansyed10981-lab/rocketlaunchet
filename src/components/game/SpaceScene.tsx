@@ -18,8 +18,8 @@ export function SpaceScene({flight,input,palette:p,onTick}: { flight: MutableRef
   const dy=(k.has('KeyW')||k.has('ArrowUp')?1:0)-(k.has('KeyS')||k.has('ArrowDown')?1:0);
   stepFlight(s,{x:dx||input.current.x,y:dy||input.current.y,boost:input.current.boost||k.has('Space')},dt);
   if(ship.current){
-   if(s.phase==='ready'){const mobile=size.width<700;const narrow=size.width/size.height<1;ship.current.position.set(mobile?.6:narrow?2.6:4,(mobile?4.4:0)+Math.sin(clock.elapsedTime*.6)*.2,0);ship.current.rotation.set(.15,-.4,-.55);ship.current.scale.setScalar(mobile?.63:narrow?.88:1.32);target.set(0,1,17);}
-   else {ship.current.position.set(s.x,s.y,0);ship.current.rotation.set(-Math.PI/2+s.vy*.015,-s.vx*.015,-s.vx*.035);ship.current.scale.setScalar(.55);target.set(s.x*.28,s.y*.25+3,13);}
+   if(s.phase==='ready'){const mobile=size.width<700;const narrow=size.width/size.height<1;ship.current.position.set(mobile?1:narrow?2.6:4,(mobile?6.1:0)+Math.sin(clock.elapsedTime*.6)*.2,0);ship.current.rotation.set(.15,-.4,-.55);ship.current.scale.setScalar(mobile?.42:narrow?.88:1.32);target.set(0,1,17);}
+   else {ship.current.position.set(s.x,s.y,0);ship.current.rotation.set(-Math.PI/2+s.vy*.015,-s.vx*.015,-s.vx*.035);ship.current.scale.setScalar(.55);target.set(s.x*.28,s.y*.25+6,13);}
    ship.current.visible=s.invincible===0||Math.floor(s.time*12)%2===0;
    camera.position.lerp(target,1-Math.exp(-3*dt));
    camera.lookAt((s.phase==='ready'?0:s.x*.15)+Math.sin(s.time*77)*s.flash*.16,(s.phase==='ready'?0:s.y*.15)+Math.cos(s.time*63)*s.flash*.12,-7);
