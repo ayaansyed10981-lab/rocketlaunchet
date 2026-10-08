@@ -7,8 +7,8 @@ import { readPalette, type Palette } from '@/lib/game/palette';
 import { SpaceScene, type FlightInput } from './SpaceScene';
 import space from '@/assets/deep-space.jpg';
 class GraphicsBoundary extends Component<{children: ReactNode}, {failed: boolean}> {
- state={failed:false}; static getDerivedStateFromError(){return {failed:true};}
- render(){return this.state.failed?<div className="graphics-error"><Orbit size={40}/><h2>Unable to start 3D flight</h2><p>WebGL graphics are unavailable. Try a browser with hardware acceleration enabled.</p><Button onClick={()=>window.location.reload()}><RotateCcw/> Try again</Button></div>:this.props.children;}
+ override state={failed:false}; static getDerivedStateFromError(){return {failed:true};}
+ override render(){return this.state.failed?<div className="graphics-error"><Orbit size={40}/><h2>Unable to start 3D flight</h2><p>WebGL graphics are unavailable. Try a browser with hardware acceleration enabled.</p><Button onClick={()=>window.location.reload()}><RotateCcw/> Try again</Button></div>:this.props.children;}
 }
 export function SpaceGame(){
  const flight=useRef(createFlight());const input=useRef<FlightInput>({x:0,y:0,boost:false,keys:new Set(),pointer:false});
@@ -17,7 +17,7 @@ export function SpaceGame(){
  const noticeTime=useRef(0); const notice=useRef('');
  const sync=()=>{const s=flight.current;if(s.notice!==notice.current){notice.current=s.notice;noticeTime.current=s.time+2;}setHud({phase:s.phase,score:Math.floor(s.score),distance:Math.floor(s.distance),health:s.health,energy:s.energy,speed:Math.round(s.speed*10),rings:s.rings,flash:s.flash,notice:s.time<noticeTime.current?s.notice:'',boost:s.boost});};
  const start=()=>{flight.current=createFlight();flight.current.phase='playing';notice.current='';input.current.keys.clear();input.current.x=0;input.current.y=0;input.current.boost=false;setHelp(false);sync();};
- const pause=()=>{const s=flight.current;if(s.phase==='playing')s.phase='paused';else if(s.phase==='paused')s.phase='playing';input.current.keys.clear();input.current.boost=false;sync();};
+ const pause=()=>{const s=flight.current;if(s.phase==='playing')s.phase='paused';else if(s.phase==='paused')s.phase='playing';input.current.keys.clear();input.current.boost=false;input.current.x=0;input.current.y=0;input.current.pointer=false;sync();};
  useEffect(()=>{
   setPalette(readPalette());try{const c=document.createElement('canvas');setSupported(Boolean(c.getContext('webgl2')));setBest(Number(localStorage.getItem('starbound-best')||0));}catch{setSupported(false);}
   const down=(e:KeyboardEvent)=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();if(e.code==='Escape'&&!e.repeat){pause();return;}if(e.code==='Enter'&&flight.current.phase==='ready'){start();return;}input.current.keys.add(e.code);};
