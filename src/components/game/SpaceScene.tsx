@@ -5,9 +5,10 @@ import * as T from 'three';
 import { Rocket } from './Rocket';
 import type { Palette } from '@/lib/game/palette';
 import { stepFlight, type Flight } from '@/lib/game/simulation';
-export type FlightInput = { x: number; y: number; boost: boolean; keys: Set<string>; pointer: boolean };
+export type FlightInput = { x: number; y: number; boost: boolean; keys: Set<string>; pointer: boolean; aim: {x:number;y:number}|null; fire: boolean; fireQueued: boolean };
 export function SpaceScene({flight,input,palette:p,onTick}: { flight: MutableRefObject<Flight>; input: MutableRefObject<FlightInput>; palette: Palette; onTick: () => void }) {
  const ship = useRef<T.Group>(null); const rocks = useRef<T.InstancedMesh>(null); const ringRefs = useRef<(T.Mesh|null)[]>([]); const stars = useRef<T.Points>(null); const timer=useRef(0);
+ const shotMesh=useRef<T.InstancedMesh>(null); const burstMesh=useRef<T.InstancedMesh>(null);
  const dummy=useMemo(()=>new T.Object3D(),[]); const target=useMemo(()=>new T.Vector3(),[]);
  const rockGeo=useMemo(()=>{const g=new T.IcosahedronGeometry(1,2);const a=g.getAttribute('position');for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i);const n=1+.18*Math.sin(x*16+y*13+z*19);a.setXYZ(i,x*n,y*n,z*n);}g.computeVertexNormals();return g;},[]);
  const starPositions=useMemo(()=>{const a=new Float32Array(1500*3);for(let i=0;i<1500;i++){a[i*3]=Math.sin(i*127.1)*100;a[i*3+1]=Math.sin(i*311.7)*65;a[i*3+2]=-5-(i/1500)*240;}return a;},[]);
@@ -15,8 +16,12 @@ export function SpaceScene({flight,input,palette:p,onTick}: { flight: MutableRef
  useFrame(({camera,clock,size},raw)=>{
   const dt=Math.min(raw,.05),s=flight.current,k=input.current.keys;
   const dx=(k.has('KeyD')||k.has('ArrowRight')?1:0)-(k.has('KeyA')||k.has('ArrowLeft')?1:0);
-  const dy=(k.has('KeyW')||k.has('ArrowUp')?1:0)-(k.has('KeyS')||k.has('ArrowDown')?1:0);
-  stepFlight(s,{x:dx||input.current.x,y:dy||input.current.y,boost:input.current.boost||k.has('Space')},dt);
+  const throttle=(k.has('KeyW')||k.has('ArrowUp')?1:0)-(k.has('KeyS')||k.has('ArrowDown')?1:0);
+  const inp=input.current;
+  stepFlight(s,{x:dx||(inp.aim?0:inp.x),y:inp.aim?0:inp.y,throttle,aim:inp.aim,boost:inp.boost||k.has('Space'),fire:inp.fire||inp.fireQueued},dt);
+  inp.fireQueued=false;
+  if(shotMesh.current){for(let i=0;i<24;i++){const sh=s.shots[i];if(sh){dummy.position.set(sh.x,sh.y,sh.z);dummy.rotation.set(Math.PI/2,0,0);dummy.scale.setScalar(1);}else dummy.scale.setScalar(0);dummy.updateMatrix();shotMesh.current.setMatrixAt(i,dummy.matrix);}shotMesh.current.instanceMatrix.needsUpdate=true;}
+  if(burstMesh.current){for(let i=0;i<12;i++){const b=s.bursts[i];if(b){dummy.position.set(b.x,b.y,b.z);dummy.rotation.set(0,0,0);dummy.scale.setScalar(b.size*(.6+b.t*3.2));}else dummy.scale.setScalar(0);dummy.updateMatrix();burstMesh.current.setMatrixAt(i,dummy.matrix);}burstMesh.current.instanceMatrix.needsUpdate=true;const m=burstMesh.current.material as T.MeshBasicMaterial;const oldest=s.bursts[0];m.opacity=oldest?Math.max(0,.9-oldest.t*1.3):0;}
   if(ship.current){
    if(s.phase==='ready'){const mobile=size.width<700;const narrow=size.width/size.height<1;ship.current.position.set(mobile?1:narrow?2.6:4,(mobile?6.1:0)+Math.sin(clock.elapsedTime*.6)*.2,0);ship.current.rotation.set(.15,-.4,-.55);ship.current.scale.setScalar(mobile?.42:narrow?.88:1.32);target.set(0,1,17);}
    else {ship.current.position.set(s.x,s.y,0);ship.current.rotation.set(-Math.PI/2+s.vy*.015,-s.vx*.015,-s.vx*.035);ship.current.scale.setScalar(.55);target.set(s.x*.28,s.y*.25+6,13);}
@@ -44,6 +49,8 @@ export function SpaceScene({flight,input,palette:p,onTick}: { flight: MutableRef
   </group>
   <group ref={ship}><Rocket palette={p} boost={flight.current.boost}/></group>
   <instancedMesh ref={rocks} args={[rockGeo,undefined,21]} frustumCulled={false}><meshStandardMaterial color={p.rock} roughness={.95} metalness={.15} map={texture}/></instancedMesh>
+  <instancedMesh ref={shotMesh} args={[undefined,undefined,24]} frustumCulled={false}><capsuleGeometry args={[.09,1.4,4,8]}/><meshBasicMaterial color={p.gold} toneMapped={false}/></instancedMesh>
+  <instancedMesh ref={burstMesh} args={[undefined,undefined,12]} frustumCulled={false}><icosahedronGeometry args={[1,1]}/><meshBasicMaterial color={p.gold} transparent opacity={.8} depthWrite={false} blending={T.AdditiveBlending} toneMapped={false}/></instancedMesh>
   {flight.current.entities.map((e,i)=>e.kind==='ring'?<mesh key={i} ref={m=>{ringRefs.current[i]=m;}} position={[e.x,e.y,e.z]}><torusGeometry args={[e.radius,.08,8,48]}/><meshStandardMaterial color={p.cyan} emissive={p.cyan} emissiveIntensity={.7} roughness={.2}/></mesh>:null)}
  </>;
 }
