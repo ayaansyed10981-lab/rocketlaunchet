@@ -48,7 +48,7 @@ export function SpaceScene({flight,input,palette:p,onTick}: { flight: MutableRef
    <mesh rotation-x={1.2}><ringGeometry args={[16,24,100]}/><meshStandardMaterial color={p.ivory} side={T.DoubleSide} transparent opacity={.28} roughness={.9}/></mesh>
   </group>
   <group ref={ship}><Rocket palette={p} boost={flight.current.boost}/></group>
-  <instancedMesh ref={rocks} args={[rockGeo,undefined,21]} frustumCulled={false}><meshStandardMaterial color={p.rock} roughness={.95} metalness={.15} map={texture}/></instancedMesh>
+  <instancedMesh ref={rocks} args={[rockGeo,undefined,64]} frustumCulled={false}><meshStandardMaterial color={p.rock} roughness={.95} metalness={.15} map={texture}/></instancedMesh>
   <instancedMesh ref={shotMesh} args={[undefined,undefined,24]} frustumCulled={false}><capsuleGeometry args={[.09,1.4,4,8]}/><meshBasicMaterial color={p.gold} toneMapped={false}/></instancedMesh>
   <instancedMesh ref={burstMesh} args={[undefined,undefined,12]} frustumCulled={false}><icosahedronGeometry args={[1,1]}/><meshBasicMaterial color={p.gold} transparent opacity={.8} depthWrite={false} blending={T.AdditiveBlending} toneMapped={false}/></instancedMesh>
   {flight.current.entities.map((e,i)=>e.kind==='ring'?<mesh key={i} ref={m=>{ringRefs.current[i]=m;}} position={[e.x,e.y,e.z]}><torusGeometry args={[e.radius,.08,8,48]}/><meshStandardMaterial color={p.cyan} emissive={p.cyan} emissiveIntensity={.7} roughness={.2}/></mesh>:null)}
