@@ -29,7 +29,7 @@ export function stepFlight(s: Flight, input: StepInput, rawDt: number) {
   s.boost = input.boost && s.energy > 1;
   s.energy = clamp(s.energy + (s.boost ? -24 : 13) * dt, 0, 100);
   const throttle = clamp(input.throttle ?? 0, -1, 1);
-  const speedTarget = Math.max(10, (s.boost ? 49 : 24) + Math.min(16, s.distance / 500) + throttle * (throttle > 0 ? 10 : 12));
+  const speedTarget = Math.max(10, ((s.boost ? 49 : 24) + Math.min(16, s.distance / 500) + throttle * (throttle > 0 ? 10 : 12)) * s.mission.speed);
   s.speed += (speedTarget - s.speed) * (1 - Math.exp(-3 * dt));
   let tx: number, ty: number;
   if (input.aim) {
@@ -57,14 +57,14 @@ export function stepFlight(s: Flight, input: StepInput, rawDt: number) {
     if (!e.collected && previous <= 1.3 && e.z >= -1.3) {
       const d = Math.hypot(s.x - e.x, s.y - e.y);
       if (e.kind === 'ring' && d < e.radius - 0.45) {
-        e.collected = true; s.rings++; s.score += 250; s.energy = Math.min(100, s.energy + 20); s.notice = '+250 · GATE CLEARED';
+        e.collected = true; s.rings++; s.score += s.mission.gatePoints; s.energy = Math.min(100, s.energy + 20); s.notice = `+${s.mission.gatePoints} · GATE CLEARED`;
       } else if (e.kind === 'rock' && d < e.radius + 0.6 && s.invincible === 0) {
         s.health--; s.invincible = 2; s.flash = 1; s.notice = 'HULL IMPACT'; e.collected = true;
         if (s.health <= 0) s.phase = 'over';
       }
     }
     if (e.z > 18) {
-      e.z -= 364; e.x = Math.sin(s.time * 2.7 + s.entities.indexOf(e) * 3.3) * 8; e.y = Math.cos(s.time * 1.4 + s.entities.indexOf(e)) * 4.6; e.collected = false;
+      e.z -= s.span; e.x = Math.sin(s.time * 2.7 + s.entities.indexOf(e) * 3.3) * 8; e.y = Math.cos(s.time * 1.4 + s.entities.indexOf(e)) * 4.6; e.collected = false;
     }
   }
   for (const shot of s.shots) {
@@ -73,7 +73,7 @@ export function stepFlight(s: Flight, input: StepInput, rawDt: number) {
       if (e.kind !== 'rock' || e.collected) continue;
       const reach = e.radius + 0.4;
       if (e.z + reach >= shot.z && e.z - reach <= from && Math.hypot(shot.x - e.x, shot.y - e.y) < reach) {
-        e.collected = true; shot.life = 0; s.hits++; s.score += ROCK_POINTS; s.notice = `+${ROCK_POINTS} · ASTEROID DESTROYED`;
+        e.collected = true; shot.life = 0; s.hits++; s.score += s.mission.rockPoints; s.notice = `+${s.mission.rockPoints} · ASTEROID DESTROYED`;
         s.bursts.push({ x: e.x, y: e.y, z: e.z, t: 0, size: e.radius });
         break;
       }
