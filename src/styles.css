@@ -188,6 +188,7 @@
 @media(max-width:700px){
  .game-header{padding:22px 6%;}.wordmark{font-size:16px;gap:8px;}.sector{display:none;}.header-tools{gap:5px;}
  .start-screen{left:7%;top:44%;transform:translateY(-37%);}.start-screen h1{font-size:98px;}.mission-tag{font-size:8px;}.start-description{font-size:12px;}.launch-button{height:52px;padding:0 18px;font-size:12px;}.launch-button svg:last-child{margin-left:10px;}.launch-actions{gap:3px;}.how-button{font-size:10px;gap:6px;}.quick-controls{font-size:8px;gap:7px;}.quick-controls svg{width:12px;}.flight-id{font-size:7px;margin-top:28px;}.ship-callout{display:none;}.start-footer{left:6%;right:6%;bottom:20px;font-size:7px;}.start-footer>span:nth-child(2){display:none;}
+ .mission-designer{margin-top:16px;padding:12px 14px;max-width:none;}.mission-card strong{font-size:15px;}.mission-create{height:40px;}.launch-button{height:46px;}
  .flight-stats{top:90px;left:6%;gap:22px;}.flight-stats strong{font-size:20px;}.flight-objective{top:158px;left:6%;right:auto;text-align:left;}.flight-objective span{font-size:9px;}.bottom-instruments{left:6%;right:6%;bottom:30px;}.hull-cell{width:24px;}.boost-indicator{width:105px;}.speed-indicator strong{font-size:38px;}.hud-label{font-size:7px;}.boost-key{font-size:7px;}.touch-boost,.touch-hint{display:flex;}.flight-modal{padding:32px 25px;}.flight-modal h2{font-size:38px;}.manual-row{margin:18px 0;}.help-modal{max-height:90dvh;overflow:auto;}.result-stats{gap:22px;}.result-stats strong{font-size:16px;}
 }
 @media(pointer:coarse){.touch-boost,.touch-hint{display:flex;}}
