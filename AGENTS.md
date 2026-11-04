@@ -14,3 +14,4 @@
 - Use bespoke lathed and extruded geometry for the fictional reference-specific rocket; generic stock spacecraft cannot faithfully preserve its silhouette.
 - Mount the game on the client-only index route, with DOM menus above an always-mounted Canvas; WebGL must not run during SSR and pausing must preserve the round.
 - Define UI and scene palette roles in the global design system; shared scene colors are read from its CSS variables after mounting.
+- AI-generated mission specs go through a server function and must pass `validateMission` clamping before they reach the simulation; never feed raw model output into flight rules.
