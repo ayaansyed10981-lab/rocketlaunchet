@@ -38,16 +38,16 @@ export function validateMission(raw: unknown): MissionSpec | null {
   if (typeof raw !== 'object' || raw === null) return null;
   const r = raw as Record<string, unknown>;
   return {
-    name: clampText(r.name, 28, 'CUSTOM MISSION'),
-    brief: clampText(r.brief, 120, 'A hand-tuned corner of the drift.'),
-    objective: clampText(r.objective, 100, DEFAULT_MISSION.objective),
-    gateCount: Math.round(clampNumber(r.gateCount, 5, 20, DEFAULT_MISSION.gateCount)),
-    gatePoints: Math.round(clampNumber(r.gatePoints, 100, 500, DEFAULT_MISSION.gatePoints)),
-    gateRadius: clampNumber(r.gateRadius, 1.6, 3.2, DEFAULT_MISSION.gateRadius),
-    rockDensity: clampNumber(r.rockDensity, 0.4, 2.5, DEFAULT_MISSION.rockDensity),
-    rockPoints: Math.round(clampNumber(r.rockPoints, 50, 250, DEFAULT_MISSION.rockPoints)),
-    speed: clampNumber(r.speed, 0.8, 1.5, DEFAULT_MISSION.speed),
-    hull: Math.round(clampNumber(r.hull, 1, 5, DEFAULT_MISSION.hull)),
+    name: clampText(r['name'], 28, 'CUSTOM MISSION'),
+    brief: clampText(r['brief'], 120, 'A hand-tuned corner of the drift.'),
+    objective: clampText(r['objective'], 100, DEFAULT_MISSION.objective),
+    gateCount: Math.round(clampNumber(r['gateCount'], 5, 20, DEFAULT_MISSION.gateCount)),
+    gatePoints: Math.round(clampNumber(r['gatePoints'], 100, 500, DEFAULT_MISSION.gatePoints)),
+    gateRadius: clampNumber(r['gateRadius'], 1.6, 3.2, DEFAULT_MISSION.gateRadius),
+    rockDensity: clampNumber(r['rockDensity'], 0.4, 2.5, DEFAULT_MISSION.rockDensity),
+    rockPoints: Math.round(clampNumber(r['rockPoints'], 50, 250, DEFAULT_MISSION.rockPoints)),
+    speed: clampNumber(r['speed'], 0.8, 1.5, DEFAULT_MISSION.speed),
+    hull: Math.round(clampNumber(r['hull'], 1, 5, DEFAULT_MISSION.hull)),
   };
 }
 
