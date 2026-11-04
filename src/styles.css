@@ -116,6 +116,20 @@
 .flight-id {font-size:9px;color:var(--muted-foreground);margin-top:40px;}
 .flight-id>span:first-child {color:var(--foreground);margin-right:12px;}
 .flight-id-divider {margin:0 14px;color:var(--border);}
+.mission-designer {margin-top:26px;max-width:430px;pointer-events:auto;border:1px solid var(--border);border-radius:6px;padding:15px 18px;background:color-mix(in oklab,var(--card) 55%,transparent);backdrop-filter:blur(10px);}
+.mission-designer-head {display:flex;align-items:center;gap:8px;font-size:9px;font-weight:700;letter-spacing:.16em;color:var(--primary);margin-bottom:10px;}
+.mission-brief {width:100%;resize:none;background:var(--subtle);border:1px solid var(--border);border-radius:4px;color:var(--foreground);font-size:12px;line-height:1.6;padding:9px 11px;font-family:inherit;outline:none;user-select:text;}
+.mission-brief:focus {border-color:var(--primary);}
+.mission-create {margin-top:10px;height:38px;font-size:11px;gap:9px;align-self:flex-start;}
+.mission-create:disabled {opacity:.5;pointer-events:none;}
+.mission-designer-actions {display:flex;align-items:center;gap:14px;margin-top:2px;flex-wrap:wrap;}
+.mission-card strong {display:block;font-family:var(--font-heading);font-size:19px;letter-spacing:.06em;color:var(--foreground);}
+.mission-card p {margin:6px 0 10px;font-size:11px;line-height:1.7;color:var(--muted-foreground);}
+.mission-chips {display:flex;flex-wrap:wrap;gap:6px;}
+.mission-chips span {font-size:8px;font-weight:700;letter-spacing:.12em;color:var(--foreground);border:1px solid var(--border);border-radius:99px;padding:4px 10px;}
+.mission-clear {margin-top:10px;background:none;border:0;color:var(--muted-foreground);font-size:10px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:inherit;padding:0;}
+.mission-clear:hover {color:var(--foreground);}
+.mission-error {margin-top:10px;font-size:10px;line-height:1.6;color:var(--destructive);}
 .ship-callout {position:absolute;right:12%;top:73%;font-size:11px;display:flex;align-items:center;gap:15px;pointer-events:none;}
 .ship-callout small {display:block;font-size:8px;color:var(--muted-foreground);margin-top:7px;}
 .callout-line {width:50px;height:1px;background:var(--border);}
